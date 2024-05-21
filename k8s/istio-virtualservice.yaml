@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: app3
+spec:
+  hosts:
+  - app3.my-system.svc.cluster.local
+  http:
+  - name: "new-version"
+    match:
+    - headers:
+        baggage:
+          regex: ".*pr=(.*)?"
+    route:
+    - destination:
+        host: app3-new-version.my-system.svc.cluster.local
+  - name: "live-version"
+    route:
+    - destination:
+        host: app3.my-system.svc.cluster.local

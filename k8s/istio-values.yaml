@@ -1,0 +1,22 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  profile: minimal
+  revision: 1-21
+  meshConfig:
+    accessLogFile: /dev/stdout
+    accessLogFormat: |
+      [ACCES_LOGS] "baggage": "%REQ(BAGGAGE)%" "authority": "%REQ(:AUTHORITY)%" "method": "%REQ(:METHOD)%" "path": "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+    outboundTrafficPolicy:
+      mode: ALLOW_ANY
+    rootNamespace: istio-system
+  components:
+    ingressGateways:
+      - name: ingressgateway
+        enabled: true
+        namespace: istio-system
+  values:
+    gateways:
+      istio-ingressgateway:
+        autoscaleEnabled: false
+        injectionTemplate: gateway
